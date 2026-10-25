@@ -1,0 +1,12 @@
+- name: CRUD lifecycle
+  steps:
+    - {method: POST, path: /policies, json: {name: test, coverage: 100}, status: 201}
+    - {method: GET, path: '/policies/{id}', status: 200}
+    - {method: DELETE, path: '/policies/{id}', status: 204}
+    - {method: GET, path: '/policies/{id}', status: 404}
+- name: Invalid payload
+  steps:
+    - {method: POST, path: /policies, json: {name: '', coverage: -1}, status: 422}
+- name: Invalid page
+  steps:
+    - {method: GET, path: '/policies?page=-1', status: 400}

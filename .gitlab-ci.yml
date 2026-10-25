@@ -1,0 +1,18 @@
+image: python:3.12-slim
+stages: [lint, test, report]
+before_script:
+  - pip install -r requirements.txt
+lint:
+  stage: lint
+  script: [python -m compileall -q .]
+test:
+  stage: test
+  script: [pytest -n 4 --reruns 1 --junitxml=results.xml --alluredir=allure-results]
+  artifacts:
+    when: always
+    reports: {junit: results.xml}
+    paths: [allure-results/, flaky-*.json]
+report:
+  stage: report
+  script: [echo "Download Allure results and run allure generate allure-results"]
+  artifacts: {paths: [allure-results/]}
